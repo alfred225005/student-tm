@@ -11,10 +11,15 @@ const port = process.env.PORT || 5000;
 const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173').split(',').map(value => value.trim());
 
 app.disable('x-powered-by');
-app.use(cors({ origin(origin, callback) {
-  if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-  return callback(new Error('This website origin is not allowed by CORS.'));
-} }));
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://localhost:5176'
+  ],
+  credentials: true
+}));
 app.use(express.json({ limit: '20kb' }));
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'StudyFlow API is running.' }));
 app.use('/api/auth', authRoutes);
